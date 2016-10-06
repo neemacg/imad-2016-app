@@ -4,21 +4,87 @@ var path = require('path');
 
 var app = express();
 app.use(morgan('combined'));
+var articles={
+    
+
+ articleone:{
+    title:"Article one:Neema JInesh",
+    heading:"Article One",
+    date:"oct 1,2016",
+    content:"Artvgfbghtgbhgbhgtbhg"
+    
+},
+articletwo:{
+    title:"Article two:Neema JInesh",
+    heading:"Article two",
+    date:"oct 2 ,2016",
+    content:"Artvgfbghtgbhgbhgtbhgvvzsvsvsvsva`1111111111111114"
+    
+},
+ articleonthree:{
+    title:"Article three:Neema JInesh",
+    heading:"Article threee",
+    date:"oct 3,2016",
+    content:"Artvgfbghtgbhgbhgtbh222222222222222g"
+    
+}
+
+}
+function createtemplate(data){
+    var title=data.title;
+    var heading=data.heading;
+    var date=data.date;
+    var content=data.content;
+    var htmltemplate=`<html>
+    <head>
+        <title>
+           ${title}
+        </title>
+        <meta name="vimport" content="width=device-width,initial-scale=1"/>
+         <link href="/ui/style.css" rel="stylesheet" />
+    
+    </head>
+    <body>
+        <div class="container">
+        <div>
+            <a href="/">Home</a>
+        </div>
+        <hr/>
+        <h3>
+            ${heading}
+        </h3>
+        <div>
+            oct 6 ,2016
+        </div>
+        <div>
+            ${content}
+        </div>
+        </div>
+    </body>
+        
+</html>`;
+return htmltemplate;
+}
+
+
+
+
+
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
 
 app.get('/article-one', function (req, res) {
- res.sendFile(path.join(__dirname, 'ui', 'article-one.html'));
+ res.send(createtemplate(articles.articleone));
 });
 
-app.get('/article-two', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'article-two.html'));
+app.get('/article-two', function (req,res){
+  res.send(createtemplate(articles.articletwo));
 });
 
 app.get('/article-three', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'article-three.html'));
+  res.send(createtemplate(articles.articlethree));
 });
 
 app.get('/ui/style.css', function (req, res) {
