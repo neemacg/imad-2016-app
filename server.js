@@ -21,8 +21,8 @@ articletwo:{
     content:"Artvgfbghtgbhgbhgtbhgvvzsvsvsvsva`1111111111111114"
     
 },
- articleonthree:{
-    title:"Article three:Neema JInesh",
+ articlethree:{
+    titlxe:"Article three:Neema JInesh",
     heading:"Article threee",
     date:"oct 3,2016",
     content:"Artvgfbghtgbhgbhgtbh222222222222222g"
