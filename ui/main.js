@@ -14,6 +14,6 @@ button.onclick=function()
             }
         }
     }
-   request.open('GET',"http://neemacg.imad.hasura-app.io/counter",trim);
+   request.open('GET',"http://neemacg.imad.hasura-app.io/counter",true);
    request.send(null);
 }
