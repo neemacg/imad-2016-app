@@ -20,3 +20,113 @@ body {
     height: 200px;
 }
 cimg {width:100%;}
+
+body {
+background-image: linear-gradient(right bottom, rgb(225,197,185) 17%, rgb(194,128,112) 91%);
+background-image: -o-linear-gradient(right bottom, rgb(225,197,185) 17%, rgb(194,128,112) 91%);
+background-image: -moz-linear-gradient(right bottom, rgb(225,197,185) 17%, rgb(194,128,112) 91%);
+background-image: -webkit-linear-gradient(right bottom, rgb(225,197,185) 17%, rgb(194,128,112) 91%);
+background-image: -ms-linear-gradient(right bottom, rgb(225,197,185) 17%, rgb(194,128,112) 91%);
+
+background-image: -webkit-gradient(
+    linear,
+    right bottom,
+    left top,
+    color-stop(0.17, rgb(225,197,185)),
+    color-stop(0.91, rgb(194,128,112))
+);
+  min-height: 100%;
+}
+
+
+.card {
+  border-radius: 8px;
+  background-color: white;
+  margin: 1% auto;
+  overflow: hidden;
+  width: 400px;
+}
+
+.wall-container {
+  height: 200px;
+  overflow: hidden;
+}
+
+.wall-pic {
+  border-radius: 8px 8px 0 0;
+  width: 100%;
+}
+
+.profile {
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: #454545;
+  height: 100px;
+  padding: 20px;
+}
+
+.profile h2 {
+  color: #776B5F;
+  font: 28px/30px Helvetica, sans-serif;
+  font-weight: bold;
+  margin: 5px 0 10px 0;
+  padding: 0;
+  text-transform: capitalize;
+}
+
+.profile p {
+  color: #776B5F;
+  font: 14px/16px Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.profile-pic-border{
+    border: 1px solid #B7AEA4;
+    border-radius: 50%;
+    float: left;
+    height: 85px;
+    margin: 0 20px 0 0;
+    width: 85px;
+}
+
+.profile-pic {
+   border: 5px solid #fff;
+   border-radius: 50%;
+   height: 75px;
+   width: 75px;
+}
+
+.social-container {
+  height: 50px;
+}
+
+.social {
+  box-sizing: border-box;
+  background-color: #f6f1ed;
+  float: left;
+  height: 50px;
+  padding: 0 0 0 40px;
+  width: 33%;
+}
+
+.social-icon {
+  color: #b1a599;
+  float: left;
+  font-family: 'RaphaelIcons';
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 18px;
+  margin: 0 8px 0 0;
+}
+
+.social p {
+  color: #b1a599;
+  font: 18px/18px Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.middle {
+  margin: 0 2px 0 2px;
+}
