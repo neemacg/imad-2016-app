@@ -9,6 +9,13 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+// Database connection 
+
+var pg = require('pg');
+var conString = "postgres://neemacg:db-neemacg-84054@localhost:5432/neemacg";
+
+var client = new pg.Client(conString);
+client.connect();
 
 var articles={
     
@@ -124,8 +131,8 @@ app.post('/regSubmit',function(req,res){
     var name = req.body.user.name;
     var email = req.body.user.email;
     var password = req.body.user.password;
-
-    res.send(name + ' ' + email + ' ' + password);
+    client.query("INSERT INTO user(email,pwd,uname) values($1, $2)", [email,password,uname]);
+    res.send(name + ' ' + email + ' ' + password+" inserted the row");
 });
 
 var port = 8080; // Use 8080 for local development because you might already have apache running on 80
