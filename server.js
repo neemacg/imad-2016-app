@@ -123,7 +123,7 @@ app.get('/ui/madi.png', function (req, res) {
 app.post('/regSubmit',function(req,res){
     var name = req.body.user.name;
     var email = req.body.user.email;
-    var geo = req.body.user.password;
+    var password = req.body.user.password;
 
     res.send(name + ' ' + email + ' ' + password);
 });
