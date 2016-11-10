@@ -14,8 +14,19 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 var pg = require('pg');
 var conString = "postgres://neemacg:db-neemacg-84054@localhost:5432/neemacg";
 
-//var client = new pg.Client(conString);
+var client = new pg.Client(conString);
 //client.connect();
+
+pg.connect(conString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+}
+);
+
 
 var articles={
     
