@@ -159,7 +159,11 @@ app.post('/regSubmit',function(req,res){
       if(err) {
         return console.error('error fetching client from pool', err);
       }
-      client.query('INSERT INTO user(email,pwd,uname) values($1,$2,$3)',[email,password,name]);
+      client.query('INSERT INTO user(email,pwd,uname) values($1,$2,$3)',[email,password,name],function(err,result){
+          if(err){
+              res.send(err);
+          }
+      });
     });
     
     
