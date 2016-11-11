@@ -17,15 +17,15 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 //var client = new pg.Client(conString);
 //client.connect();
 
-pg.connect(conString, (err, client, done) => {
-    // Handle connection errors
-    if(err) {
-      done();
-      console.log(err);
-      return res.status(500).json({success: false, data: err});
-    }
-}
-);
+// pg.connect(conString, (err, client, done) => {
+//     // Handle connection errors
+//     if(err) {
+//       done();
+//       console.log(err);
+//       return res.status(500).json({success: false, data: err});
+//     }
+// }
+// );
 
 
 var articles={
