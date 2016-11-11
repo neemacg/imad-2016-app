@@ -15,8 +15,22 @@ var pg = require('pg');
 //var conString = "postgres://neemacg:db-neemacg-84054@localhost:5432/neemacg";
 var conString = "postgres://localhost:5432/neemacg";
 
-var client = new pg.Client(conString);
-client.connect();
+//var client = new pg.Client(conString);
+//client.connect();
+
+
+pg.connect(connectionString, onConnect);
+
+function onConnect(err, client, done) {
+  //Err - This means something went wrong connecting to the database.
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+
+  //For now let's end client
+  client.end();
+}
 
 // pg.connect(conString, (err, client, done) => {
 //     // Handle connection errors
