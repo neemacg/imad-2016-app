@@ -155,6 +155,8 @@ app.post('/regSubmit',function(req,res){
     
     // Insert into the db
     
+    pool.query('INSERT INTO user(email,pwd,uname) values($1,$2,$3)',[email,password,name]);
+    
     pool.connect(function(err, client, done) {
       if(err) {
            res.send(err);
