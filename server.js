@@ -111,6 +111,29 @@ return htmltemplate;
 
 
 app.get('/', function (req, res) {
+    
+    var pg = require('pg');
+    //var conString = "postgres://neemacg:db-neemacg-84054@localhost:5432/neemacg";
+    var conString = "postgres://localhost:5432/neemacg";
+    
+    //var client = new pg.Client(conString);
+    //client.connect();
+    
+    
+    pg.connect(connectionString, onConnect);
+    
+    function onConnect(err, client, done) {
+      //Err - This means something went wrong connecting to the database.
+      if (err) {
+          res.send(err);
+        console.error(err);
+        process.exit(1);
+      }
+    
+      //For now let's end client
+      client.end();
+    }
+    
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
 
