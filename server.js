@@ -152,7 +152,17 @@ app.post('/regSubmit',function(req,res){
     var name = req.body.user.name;
     var email = req.body.user.email;
     var password = req.body.user.password;
-    client.query("INSERT INTO user(email,pwd,uname) values($1, $2)", [email,password,uname]);
+    
+    // Insert into the db
+    
+    pool.connect(function(err, client, done) {
+      if(err) {
+        return console.error('error fetching client from pool', err);
+      }
+      client.query('INSERT INTO user(email,pwd,uname) values($1,$2,$3)',[email,password,name]);
+    });
+    
+    
     res.send(name + ' ' + email + ' ' + password+" inserted the row");
 });
 
