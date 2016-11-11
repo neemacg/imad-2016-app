@@ -12,25 +12,20 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // Database connection 
 
 var pg = require('pg');
-//var conString = "postgres://neemacg:db-neemacg-84054@localhost:5432/neemacg";
-var conString = "postgres://localhost:5432/neemacg";
 
-//var client = new pg.Client(conString);
-//client.connect();
+var config = {
+  user: 'neemacg', //env var: PGUSER
+  database: 'neemacg', //env var: PGDATABASE
+  password: 'db-neemacg-84054', //env var: PGPASSWORD
+  host: 'db.imad.hasura-app.io', // Server hosting the postgres database
+  port: 5432, //env var: PGPORT
+  max: 10, // max number of clients in the pool
+  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
+};
+
+var pool = new pg.Pool(config);
 
 
-pg.connect(connectionString, onConnect);
-
-function onConnect(err, client, done) {
-  //Err - This means something went wrong connecting to the database.
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
-
-  //For now let's end client
-  client.end();
-}
 
 // pg.connect(conString, (err, client, done) => {
 //     // Handle connection errors
@@ -111,30 +106,7 @@ return htmltemplate;
 
 
 app.get('/', function (req, res) {
-    
-    var pg = require('pg');
-    //var conString = "postgres://neemacg:db-neemacg-84054@localhost:5432/neemacg";
-    var conString = "postgres://localhost:5432/neemacg";
-    
-    //var client = new pg.Client(conString);
-    //client.connect();
-    
-    
-    pg.connect(connectionString, onConnect);
-    
-    function onConnect(err, client, done) {
-      //Err - This means something went wrong connecting to the database.
-      if (err) {
-          res.send(err);
-        console.error(err);
-        process.exit(1);
-      }
-    
-      //For now let's end client
-      client.end();
-    }
-    
-  res.sendFile(path.join(__dirname, 'ui', 'index.html'));
+    res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
 
 app.get('/register', function (req, res) {
