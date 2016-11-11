@@ -164,6 +164,9 @@ app.post('/regSubmit',function(req,res){
           if(err){
               res.send(err);
           }
+          else{
+              res.send("Doneee");
+          }
       });
     });
     
