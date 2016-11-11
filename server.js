@@ -157,7 +157,8 @@ app.post('/regSubmit',function(req,res){
     
     pool.connect(function(err, client, done) {
       if(err) {
-        return console.error('error fetching client from pool', err);
+           res.send(err);
+        //return console.error('error fetching client from pool', err);
       }
       client.query('INSERT INTO user(email,pwd,uname) values($1,$2,$3)',[email,password,name],function(err,result){
           if(err){
