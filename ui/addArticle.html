@@ -43,51 +43,45 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-  <form class="form-horizontal" id="regForm" action='regSubmit' method="POST">
+  <form class="form-horizontal" id="articleForm" action='articleSubmit' method="POST" enctype="multipart/form-data">
   <fieldset>
     <div id="legend">
-      <legend class="">Register</legend>
+      <legend class="">Add article</legend>
     </div>
     <div class="form-group">
       <!-- Username -->
       <label class="control-label"  for="username">Username</label>
       <div class="controls">
-        <input type="text" id="username" name="user[name]" placeholder="" class="form-control">
-        <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+        <input type="text" id="title" name="title" placeholder="" class="form-control">
+        <p class="help-block">Article title</p>
       </div>
     </div>
  
-    <div class="form-group">
-      <!-- E-mail -->
-      <label class="control-label" for="email">E-mail</label>
-      <div class="controls">
-        <input type="text" id="email" name="user[email]" placeholder="" class="form-control">
-        <p class="help-block">Please provide your E-mail</p>
-      </div>
-    </div>
  
-    <div class="form-group">
-      <!-- Password-->
-      <label class="control-label" for="password">Password</label>
-      <div class="controls">
-        <input type="password" id="password" name="user[password]" placeholder="" class="form-control">
-        <p class="help-block">Password should be at least 4 characters</p>
-      </div>
-    </div>
+    
  
     <div class="form-group">
       <!-- Password -->
-      <label class="control-label"  for="password_confirm">Password (Confirm)</label>
+      <label class="control-label"  for="content">Content</label>
       <div class="controls">
-        <input type="password" id="password_confirm" name="user[password_confirm]" placeholder="" class="form-control">
-        <p class="help-block">Please confirm password</p>
+        <textarea class="form-control" name="content"></textarea>
+        <p class="help-block">Article Content</p>
       </div>
     </div>
  
+     <div class="form-group">
+      <!-- Password -->
+      <label class="control-label"  for="content">Image</label>
+      <div class="controls">
+        <input type="file" name="articleImage">
+        <p class="help-block">Article Image</p>
+      </div>
+    </div>
+
     <div class="form-group">
       <!-- Button -->
       <div class="form-group">
-        <button class="btn btn-success register">Register</button>
+        <button class="btn btn-success register">Save</button>
       </div>
     </div>
   </fieldset>
@@ -103,21 +97,7 @@
 </body>
 <script type="text/javascript">
   $(document).ready(function(){
-    $('.register').click(function(event){
-      event.preventDefault();
-      $.ajax({
-        url: 'regValidate',
-        type: 'post',
-        dataType: 'json',
-        data: $('#regForm').serialize(),
-        success: function(data) {
-                   console.log(data);
-                   if(data.status == 'OK'){
-                    $('#regForm').submit();
-                   }
-                 }
-    });
-    });
+    
   });
 </script>
 </html>
