@@ -13,7 +13,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // default options 
-app.use(fileUpload());
+app.use(fileUpload()); 
 
 // Database connection 
 
