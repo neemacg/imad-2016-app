@@ -14,6 +14,9 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+//app.use(express.cookieParser('12321'));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+//app.use(express.session());
+
 // default options 
 //app.use(fileUpload()); 
 
@@ -114,7 +117,8 @@ return htmltemplate;
 
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, 'ui', 'index.html'));
+	console.log(req.session);
+    res.sendFile(path.join(__dirname, 'ui', 'index_bkp2.html'));
 });
 
 app.get('/register', function (req, res) {
@@ -140,6 +144,24 @@ app.get('/submit-name',function(req,res)
     res.send(JSON.stringify(names));
 });
 
+app.get('/article/:id', function (req, res) {
+    var articleName=req.params.id;
+ 	//res.send(createtemplate(articles[articleName]));
+ 	res.sendFile(path.join(__dirname, 'ui', 'article.html'));
+});
+// Ajax content load methods
+
+app.get('/getAllArticles', function (req, res) {
+	getHomeArticles(res);
+});
+
+
+app.get('/getArticle/:id', function (req, res) {
+    var articleId=req.params.id;
+    getArticle(res,articleId);
+ 	//res.send(createtemplate(articles[articleName]));
+ 	//res.send(articleId+' Article  content comes here ');
+});
 
 /*app.get('/:articleName', function (req, res) {
     var articleName=req.params.articleName;
@@ -156,7 +178,9 @@ app.get('/ui/main.js', function (req, res) {
 app.get('/ui/madi.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'madi.png'));
 });
-
+app.get('/ui/images/cover.jpg', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui/images', 'cover.jpg'));
+});
 
 // Post methods
 
@@ -247,3 +271,66 @@ var port = 8080; // Use 8080 for local development because you might already hav
 app.listen(8080, function () {
   console.log(`IMAD course app listening on port ${port}!`);
 });
+
+//Ui methods 
+
+function getHomeArticles(res){
+	var html_article = '';
+	pool.query('SELECT * FROM "article"  ',[],function(err,result){
+    	if(err) console.log(err);
+    	else{
+    		//console.log(result);
+    		if(result.rowCount>0){
+    			result.rows.forEach(function (item) {
+				  	  console.log(item);
+				  	  var content = text_truncate(item.content);
+				  	  html_article += '<div class="row rowPad"><div class="col-md-10"><div class="media"><div class="media-left">';
+				      html_article +='<img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="...">';
+                	  html_article +='</div><div class="media-body"><h4 class="media-heading"><a href="/article/'+item.article_id+'">'+item.title+'</a></h4>'+content;
+              		  html_article += '</div></div></div></div>';
+              		  
+				});
+				return res.send(html_article);
+    		}
+    	}
+    	
+    });
+	
+}
+
+function getArticle(res,id){
+	var html_article = '';
+	pool.query('SELECT * FROM "article" WHERE article_id=$1 ',[id],function(err,result){
+    	if(err) console.log(err);
+    	else{
+    		//console.log(result);
+    		if(result.rowCount>0){
+    			result.rows.forEach(function (item) {
+				  console.log(item);
+				  	  	
+				  	  html_article += '<div class="row rowPad"><div class="col-md-10"><div class="media"><div class="">'; 
+				      html_article +='<img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="...">';
+                	  html_article +='</div><div class="media-body"><h4 class="media-heading">'+item.title+'</h4>'+item.content;
+              		  html_article += '</div></div></div></div>';
+              		  
+				});
+				return res.send(html_article);
+    		}
+    	}
+    	
+    });
+	
+}
+text_truncate = function(str, length, ending) {  
+    if (length == null) {  
+      length = 100;  
+    }  
+    if (ending == null) {  
+      ending = '...';  
+    }  
+    if (str.length > length) {  
+      return str.substring(0, length - ending.length) + ending;  
+    } else {  
+      return str;  
+    }  
+  };  
