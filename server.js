@@ -1,7 +1,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
-var fileUpload = require('express-fileupload');
+//var fileUpload = require('express-fileupload');
 
 
 var app = express();
@@ -225,7 +225,7 @@ app.post('/articleSubmit',function(req,res){
             res.status(500).send(err);
         }
         else {
-            console.log("File uploaded  Moved ");
+            console.log("File uploaded  Moved "); 
         }
     });
 
