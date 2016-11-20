@@ -210,6 +210,9 @@ app.get('/ui/main.js', function (req, res) {
 app.get('/ui/madi.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'madi.png'));
 });
+app.get('/images/bg.png', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui/images', 'bg.png'));
+});
 app.get('/ui/images/cover.jpg', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui/images', 'cover.jpg'));
 });
@@ -357,7 +360,7 @@ function getHomeArticles(res){
     		if(result.rowCount>0){
     			result.rows.forEach(function (item) {
 				  	  console.log(item);
-				  	  var content = text_truncate(item.content);
+				  	  var content = text_truncate(item.content,400);
 				  	  html_article += '<div class="row rowPad"><div class="col-md-10"><div class="media"><div class="media-left">';
 				      //html_article +='<img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="...">';
                 	  html_article +='</div><div class="media-body"><h4 class="media-heading"><a href="/article/'+item.article_id+'">'+item.title+'</a></h4>'+content;
@@ -382,7 +385,7 @@ function getArticle(res,id){
     			result.rows.forEach(function (item) {
 				  console.log(item);
 				  	  	
-				  	  html_article += '<div class="row rowPad"><div class="col-md-10"><div class="media"><div class="">'; 
+				  	  html_article += '<div class="row rowPad"><div class="col-md-8 col-centered"><div class="media"><div class="">'; 
 				      //html_article +='<img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="...">';
                 	  html_article +='</div><div class="media-body"><h4 class="media-heading">'+item.title+'</h4>'+item.content;
               		  html_article += '</div></div></div></div>';
@@ -408,7 +411,7 @@ function getComments(res,articleId){
 				  	  var createdTime = prettyDate(item.created);
 				  	  console.log("Comment created at "+createdTime);
 				  	  html_comments += '<li class="clearfix"><div class="post-comments">';
-				  	  html_comments+= '<p class="meta"><a href="#">'+item.uname+'</a> says('+createdTime+') : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>';
+				  	  html_comments+= '<p class="meta"><a href="#">'+item.uname+'</a> says('+createdTime+') : <i class="pull-right"><a href="#" style="display:none"><small>Reply</small></a></i></p>';
                       html_comments+= '<p>'+item.comment+'</p></div></li>';
 				      
               		  
