@@ -133,7 +133,14 @@ app.get('/checkSession', function (req, res) {
 });
 
 app.get('/register', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'register.html'));
+	sess = req.session;
+	if(sess.uid){
+		res.redirect('/');
+	}
+	else{
+		res.sendFile(path.join(__dirname, 'ui', 'register.html'));
+	}
+  
 });
 
 app.get('/addArticle', function (req, res) {
@@ -164,6 +171,11 @@ app.get('/article/:id', function (req, res) {
 
 app.get('/getAllArticles', function (req, res) {
 	getHomeArticles(res);
+});
+
+app.get('/getComments/:id', function (req, res) {
+	var articleId=req.params.id;
+	getComments(res,articleId);
 });
 
 
@@ -315,16 +327,17 @@ app.post('/postComment',function(req,res){
     
     var uid = req.body.uid;
     var comment = req.body.comment;
-
+    var articleId = req.body.articleId;
     
 
-    pool.query('INSERT INTO "comment" (uid,comment) values($1,$2)',[uid,comment],function(err,result){
+    pool.query('INSERT INTO "comment" (uid,comment,article_id) values($1,$2,$3)',[uid,comment,articleId],function(err,result){
     	if(err) console.log(err);
     	
-    	console.log("Query insert ::")
+    	console.log("Query insert ::");
+    	res.send(JSON.stringify({status :'OK'}))
     });
 
-    //res.s('/');
+    
     
 });
 
@@ -346,7 +359,7 @@ function getHomeArticles(res){
 				  	  console.log(item);
 				  	  var content = text_truncate(item.content);
 				  	  html_article += '<div class="row rowPad"><div class="col-md-10"><div class="media"><div class="media-left">';
-				      html_article +='<img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="...">';
+				      //html_article +='<img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="...">';
                 	  html_article +='</div><div class="media-body"><h4 class="media-heading"><a href="/article/'+item.article_id+'">'+item.title+'</a></h4>'+content;
               		  html_article += '</div></div></div></div>';
               		  
@@ -370,7 +383,7 @@ function getArticle(res,id){
 				  console.log(item);
 				  	  	
 				  	  html_article += '<div class="row rowPad"><div class="col-md-10"><div class="media"><div class="">'; 
-				      html_article +='<img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="...">';
+				      //html_article +='<img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="...">';
                 	  html_article +='</div><div class="media-body"><h4 class="media-heading">'+item.title+'</h4>'+item.content;
               		  html_article += '</div></div></div></div>';
               		  
@@ -384,7 +397,27 @@ function getArticle(res,id){
 }
 // Get the comment list for the article .. 
 function getComments(res,articleId){
-
+	var html_comments = '';
+	pool.query('SELECT * FROM "comment" c,"user" u WHERE u.uid=c.uid AND article_id=$1 ',[articleId],function(err,result){
+    	if(err) console.log(err);
+    	else{
+    		console.log(result);
+    		if(result.rowCount>0){
+    			result.rows.forEach(function (item) {
+				  	  console.log(item);
+				  	  var createdTime = prettyDate(item.created);
+				  	  console.log("Comment created at "+createdTime);
+				  	  html_comments += '<li class="clearfix"><div class="post-comments">';
+				  	  html_comments+= '<p class="meta"><a href="#">'+item.uname+'</a> says('+createdTime+') : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>';
+                      html_comments+= '<p>'+item.comment+'</p></div></li>';
+				      
+              		  
+				});
+				return res.send(html_comments);
+    		}
+    	}
+    	
+    });
 }
 text_truncate = function(str, length, ending) {  
     if (length == null) {  
@@ -399,3 +432,47 @@ text_truncate = function(str, length, ending) {
       return str;  
     }  
   };  
+
+//   function prettyDate(time) {
+//     var date = new Date((time || "").replace(/-/g, "/").replace(/[TZ]/g, " ")),
+//         diff = (((new Date()).getTime() - date.getTime()) / 1000),
+//         day_diff = Math.floor(diff / 86400);
+
+//     if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) return;
+
+//     return day_diff == 0 && (
+//     diff < 60 && "just now" || diff < 120 && "1 minute ago" || diff < 3600 && Math.floor(diff / 60) + " minutes ago" || diff < 7200 && "1 hour ago" || diff < 86400 && Math.floor(diff / 3600) + " hours ago") || day_diff == 1 && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago";
+// }
+function prettyDate(time) {
+    var date = new Date((time || "")),
+        diff = (((new Date()).getTime() - date.getTime()) / 1000),
+        day_diff = Math.floor(diff / 86400);
+    var year = date.getFullYear(),
+        month = date.getMonth()+1,
+        day = date.getDate();
+
+    if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31)
+        return (
+            year.toString()+'-'
+            +((month<10) ? '0'+month.toString() : month.toString())+'-'
+            +((day<10) ? '0'+day.toString() : day.toString())
+        );
+
+    var r =
+    ( 
+        (
+            day_diff == 0 && 
+            (
+                (diff < 60 && "just now")
+                || (diff < 120 && "1 minute ago")
+                || (diff < 3600 && Math.floor(diff / 60) + " minutes ago")
+                || (diff < 7200 && "1 hour ago")
+                || (diff < 86400 && Math.floor(diff / 3600) + " hours ago")
+            )
+        )
+        || (day_diff == 1 && "Yesterday")
+        || (day_diff < 7 && day_diff + " days ago")
+        || (day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago")
+    );
+    return r;
+}
