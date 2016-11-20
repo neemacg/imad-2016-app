@@ -70,11 +70,12 @@ background-image: -webkit-gradient(
   /*border-style: solid;*/
   border-color: #454545;
   height: 100px;
-  padding: 20px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .profile h2 {
-  color: #776B5F;
+  color: #443425;
   font: 28px/30px Helvetica, sans-serif;
   font-weight: bold;
   margin: 5px 0 10px 0;
@@ -83,7 +84,7 @@ background-image: -webkit-gradient(
 }
 
 .profile p {
-  color: #776B5F;
+  color: #443425;
   font: 14px/16px Helvetica, sans-serif;
   margin: 0;
   padding: 0;
@@ -499,3 +500,4 @@ a {
   height: 60px;
   background-color: #f5f5f5;
 }
+.bg-cover{background:url('/ui/images/cover.jpg');background-size: cover;}

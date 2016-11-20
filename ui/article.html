@@ -52,7 +52,7 @@
         <div class="loginmodal-container">
           <h1>Login to Your Account</h1><br>
           <form id="loginForm">
-          <input type="text" name="user[name]" placeholder="Username">
+          <input type="text" name="user[name]" placeholder="Email">
           <input type="password" name="user[pass]" placeholder="Password">
           <input type="submit" name="login" id="loginSubmit" class="login loginmodal-submit" value="Login">
           </form>
@@ -124,7 +124,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
     <script type="text/javascript">
 
-            articleId = window.location.href.substr('http://localhost:8080/article/'.length);
+            //articleId = window.location.href.substr('http://localhost:8080/article/'.length);
+            articleId = window.location.href.substr('http://neemacg.imad.hasura-app.io/'.length);
             $('input[name="articleId"]').val(articleId);
 
       function getParameterByName(name, url) {
