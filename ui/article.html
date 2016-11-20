@@ -56,15 +56,18 @@
                 <div class="widget-area no-padding blank">
                 <div class="status-upload">
                   <form id="commentForm">
-                    <textarea placeholder="What do you think?" id="commentBox"></textarea>
+                    <textarea placeholder="What do you think?" id="commentBox" name="comment"></textarea>
                     <!-- <ul>
                       <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Audio"><i class="fa fa-music"></i></a></li>
                       <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Video"><i class="fa fa-video-camera"></i></a></li>
                       <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Sound Record"><i class="fa fa-microphone"></i></a></li>
                       <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li>
                     </ul> -->
-                    <button type="submit" class="btn btn-success green comment"><i class="fa fa-share"></i> Comment</button>
+                    <button type="submit" class="btn btn-success green comment" id="commentBtn"><i class="fa fa-share"></i> Comment</button>
+                    <p id="cmtInfo" style="display: none; font-size: 13px;">Please login to post comment...</p>
+                    <input type="hidden" name="uid" value="">
                   </form>
+
                 </div><!-- Status Upload  -->
               </div><!-- Widget Area -->
             </div>
@@ -98,18 +101,44 @@
       }
       //var articleId = getParameterByName('id');
       $( ".articleContainer" ).load( "/getArticle/"+articleId );
+      $( ".commentsContainer" ).load( "/getComments/"+articleId );
        $(document).ready(function(){
-        $('#comment').click(function(event){
+
+        var uid;
+        $.ajax({
+            url: '/checkSession',
+            type: 'get',
+            dataType: 'json',
+            success: function(data) {
+                       console.log(data);
+                       if(data.status != 'FAIL'){
+                        $('.login_lnk').hide();
+                        $('.logout_lnk').show();
+                        uid = data.status;
+                        $('input[name="uid"]').val(uid);
+                       }
+                       else{
+                        $("#commentBtn").prop("disabled",true);
+                        $("#cmtInfo").show();
+
+                       }
+                     }
+        });
+
+         
+
+
+        $('#commentBtn').click(function(event){
           event.preventDefault();
           $.ajax({
-            url: 'postComment',
+            url: '/postComment',
             type: 'post',
             dataType: 'json',
             data: $('#commentForm').serialize(),
             success: function(data) {
                        console.log(data);
                        if(data.status == 'OK'){
-                        $('#regForm').submit();
+                        //$('#regForm').submit();
                        }
                      }
         });

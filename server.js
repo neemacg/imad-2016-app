@@ -1,7 +1,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
-
+var session = require('express-session');
 //For the file upload 
 //var fileUpload = require('express-fileupload');
 
@@ -15,7 +15,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
  
 //app.use(express.cookieParser('12321'));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-//app.use(express.session());
+app.use(session({secret: 'neema@31256'}));
 
 // default options 
 //app.use(fileUpload()); 
@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // Database connection 
 
 var pg = require('pg');
-
+var sess;
 var config = {
   user: 'neemacg', //env var: PGUSER
   database: 'neemacg', //env var: PGDATABASE
@@ -117,8 +117,19 @@ return htmltemplate;
 
 
 app.get('/', function (req, res) {
+	sess = req.session;
 	console.log(req.session);
     res.sendFile(path.join(__dirname, 'ui', 'index_bkp2.html'));
+});
+
+app.get('/checkSession', function (req, res) {
+	sess = req.session;
+	if(sess.uid){
+		res.send(JSON.stringify({ status: sess.uid}));
+	}
+	else{
+		res.send(JSON.stringify({ status: 'FAIL'}));
+	}
 });
 
 app.get('/register', function (req, res) {
@@ -163,6 +174,15 @@ app.get('/getArticle/:id', function (req, res) {
  	//res.send(articleId+' Article  content comes here ');
 });
 
+app.get('/logout', function (req, res){
+	req.session.destroy(function(err){
+		if(err){
+			console.log(err);
+		}else{
+			res.redirect('/');
+		}
+	});
+});
 /*app.get('/:articleName', function (req, res) {
     var articleName=req.params.articleName;
  res.send(createtemplate(articles[articleName]));
@@ -234,6 +254,30 @@ app.post('/regSubmit',function(req,res){
     res.redirect('/');
 });
 
+app.post('/userLogin',function(req,res){
+	sess = req.session;
+	var username = req.body.user.name;
+	var password = req.body.user.pass;
+	if(username != '' && password !=''){
+		pool.query('SELECT uid FROM "user" WHERE email=$1 AND pwd=$2',[username,password],function(err,result){
+			if(err) console.log(err);
+			else{
+				console.log(result);
+				if(result.rowCount >0){
+					result.rows.forEach(function (item){
+						if(item.uid >0){
+							console.log("User is there "+item.uid);
+							sess.uid = item.uid;
+							console.log(sess);
+							res.send(JSON.stringify({ status: 'OK',uid: item.uid}));
+						}
+					});
+				}
+			}
+		});
+	}
+});
+
 //Add article
 
 app.post('/articleSubmit',function(req,res){
@@ -265,7 +309,24 @@ app.post('/articleSubmit',function(req,res){
     
 });
 
+// Post comment 
 
+app.post('/postComment',function(req,res){
+    
+    var uid = req.body.uid;
+    var comment = req.body.comment;
+
+    
+
+    pool.query('INSERT INTO "comment" (uid,comment) values($1,$2)',[uid,comment],function(err,result){
+    	if(err) console.log(err);
+    	
+    	console.log("Query insert ::")
+    });
+
+    //res.s('/');
+    
+});
 
 var port = 8080; // Use 8080 for local development because you might already have apache running on 80
 app.listen(8080, function () {
@@ -320,6 +381,10 @@ function getArticle(res,id){
     	
     });
 	
+}
+// Get the comment list for the article .. 
+function getComments(res,articleId){
+
 }
 text_truncate = function(str, length, ending) {  
     if (length == null) {  

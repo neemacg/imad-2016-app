@@ -29,12 +29,15 @@
 
 <nav class="navbar navbar-static-top navbar-dark bg-inverse">
       <a class="navbar-brand" href="#">Neemas</a>
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav f-right">
         <li class="nav-item active">
           <a class="nav-link" href="/register">Register <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
+        <li class="nav-item login_lnk">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#login-modal">Login</a>
+        </li>
+        <li class="nav-item logout_lnk" style="display: none">
+          <a class="nav-link" href="/logout" id="logoutLink">Logout</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Contact</a>
@@ -42,10 +45,26 @@
       </ul>
     </nav>
 
-
+<!-- login model -->
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+        <div class="loginmodal-container">
+          <h1>Login to Your Account</h1><br>
+          <form id="loginForm">
+          <input type="text" name="user[name]" placeholder="Username">
+          <input type="password" name="user[pass]" placeholder="Password">
+          <input type="submit" name="login" id="loginSubmit" class="login loginmodal-submit" value="Login">
+          </form>
+          
+          <div class="login-help">
+          <a href="/register">Register</a> - <a href="#">Forgot Password</a>
+          </div>
+        </div>
+      </div>
+      </div>
 
 <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <!-- <div class="jumbotron"> -->
       
       <div id="gurney_hallek_profile_card" class="card">
       <div class="wall-container">
@@ -61,7 +80,7 @@
       
     </div>
     
-    </div>
+    <!-- </div> -->
 
 
   
@@ -190,6 +209,44 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
     <script type="text/javascript">
       $( ".homeContainer" ).load( "/getAllArticles" );
+       $(document).ready(function(){
+        var uid;
+        $.ajax({
+            url: 'checkSession',
+            type: 'get',
+            dataType: 'json',
+            success: function(data) {
+                       console.log(data);
+                       if(data.status != 'FAIL'){
+                        $('.login_lnk').hide();
+                        $('.logout_lnk').show();
+                        uid = data.status;
+
+                       }
+                     }
+        });
+
+        $('#loginSubmit').click(function(event){
+          event.preventDefault();
+          $.ajax({
+            url: 'userLogin',
+            type: 'post',
+            dataType: 'json',
+            data: $('#loginForm').serialize(),
+            success: function(data) {
+                       console.log(data);
+                       if(data.status == 'OK'){
+                        $('#login-modal').modal('toggle');
+                        $('.login_lnk').hide();
+                        $('.logout_lnk').show();
+                        uid = data.uid;
+                       }
+                     }
+        });
+        });
+
+
+       });
     </script>
 </body>
 </html>
