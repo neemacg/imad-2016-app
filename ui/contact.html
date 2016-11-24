@@ -67,18 +67,18 @@
 
 <div class="container">
     <div class="row">
-        <div class="alert alert-success msg-alert" style="display: none;">
-            <strong>Thanks For registering!</strong> Have a great time.
+          <div class="alert alert-success msg-alert" style="display: none;">
+            <strong>Thanks!</strong> Will contact you soon.
           </div>
         <div class="col-md-6">
-  <form class="form-horizontal" id="regForm" action='regSubmit' method="POST" data-toggle="validator" role="form">
+  <form class="form-horizontal" id="contactForm" action='contactSubmit' method="POST" data-toggle="validator" role="form">
   <fieldset>
     <div id="legend">
-      <legend class="">Register</legend>
+      <legend class="">Contact</legend>
     </div>
     <div class="form-group">
       <!-- Username -->
-      <label class="control-label"  for="username">Username</label>
+      <label class="control-label"  for="username">Name</label>
       <div class="controls">
         <input type="text" id="username" name="user[name]" required placeholder="" class="form-control" data-minlength="4" pattern="^[A-Za-z0-9 ]*$" data-error="Username can contain any letters or numbers, without spaces"/>
         <p class="help-block with-errors"></p>
@@ -96,26 +96,19 @@
  
     <div class="form-group">
       <!-- Password-->
-      <label class="control-label" for="password">Password</label>
+      <label class="control-label" for="password">Message</label>
       <div class="controls">
-        <input type="password" id="password" name="user[password]" placeholder="" class="form-control" required data-minlength="4">
-        <p class="help-block with-errors">Password should be at least 4 characters</p>
+        <textarea id="password" name="user[message]" placeholder="Enter the message" class="form-control" required data-minlength="4"></textarea>
+        <p class="help-block with-errors">Please enter the message</p>
       </div>
     </div>
  
-    <div class="form-group">
-      <!-- Password -->
-      <label class="control-label"  for="password_confirm">Password (Confirm)</label>
-      <div class="controls">
-        <input type="password" id="password_confirm" name="user[password_confirm]" placeholder="" class="form-control" required data-match="#password" data-match-error="Passowrds doesnt match">
-        <p class="help-block with-errors"></p>
-      </div>
-    </div>
+    
  
     <div class="form-group">
       <!-- Button -->
       <div class="form-group">
-        <button class="btn btn-success register">Register</button>
+        <button class="btn btn-success contactBtn">Register</button>
       </div>
     </div>
   </fieldset>
@@ -146,27 +139,18 @@
     });
 
 
-    $('.register').click(function(event){
+    $('.contactBtn').click(function(event){
       event.preventDefault();
 
       $.ajax({
-        url: 'regValidate',
+        url: 'contactSubmit',
         type: 'post',
         dataType: 'json',
-        data: $('#regForm').serialize(),
+        data: $('#contactForm').serialize(),
         success: function(data) {
                    console.log(data);
                    if(data.status == 'OK'){
-                    //$('#regForm').submit();
-
-                    $.post( "/regSubmit", $('#regForm').serialize())
-                      .done(function( data ) {
-                        if(data.status == 'OK'){
-                          $('.msg-alert').show(500);
-                          $('.register').closest('form').find("input[type=text], input[type=email],input[type=password], textarea").val("");
-                        }
-                      });
-
+                      $('.msg-alert').show(500);
                    }
                  }
     });

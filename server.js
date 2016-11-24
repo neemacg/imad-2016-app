@@ -143,6 +143,9 @@ app.get('/register', function (req, res) {
   
 });
 
+app.get('/contact',function (req,res){
+	res.sendFile(path.join(__dirname,'ui','contact.html'));
+});
 app.get('/addArticle', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'addArticle.html'));
 });
@@ -249,7 +252,7 @@ app.post('/regSubmit',function(req,res){
     	
     	
     });
-    //res.send(JSON.stringify({ status: 'OK'}));
+    res.send(JSON.stringify({ status: 'OK'}));
     /*pool.connect(function(err, client, done) {
       if(err) {
            console.log(err);
@@ -266,7 +269,7 @@ app.post('/regSubmit',function(req,res){
     });*/
     
     
-    res.redirect('/');
+    //res.redirect('/');
 });
 
 app.post('/userLogin',function(req,res){
@@ -341,6 +344,24 @@ app.post('/postComment',function(req,res){
     });
 
     
+    
+});
+
+// Post contact form 
+
+app.post('/contactSubmit',function(req,res){
+    var name = req.body.user.name;
+    var email = req.body.user.email;
+    var message = req.body.user.message;
+    
+    // Insert into the db
+    res.setHeader('Content-Type', 'application/json');
+    pool.query('INSERT INTO "contact" (name,mail,message) values($1,$2,$3)',[name,email,message],function(err,result){
+    	if(err) console.log(err);
+    	
+    	
+    });
+    res.send(JSON.stringify({ status: 'OK'}));
     
 });
 
