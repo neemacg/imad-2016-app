@@ -2,6 +2,7 @@ var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
 var session = require('express-session');
+var xssFilters = require('xss-filters');
 //For the file upload 
 //var fileUpload = require('express-fileupload');
 
@@ -444,7 +445,7 @@ function getComments(res,articleId){
 				  	  console.log("Comment created at "+createdTime);
 				  	  html_comments += '<li class="clearfix"><div class="post-comments">';
 				  	  html_comments+= '<p class="meta"><a href="#">'+item.uname+'</a> says('+createdTime+') : <i class="pull-right"><a href="#" style="display:none"><small>Reply</small></a></i></p>';
-                      html_comments+= '<p>'+item.comment+'</p></div></li>';
+                      html_comments+= '<p>'+xssFilters.inHTMLData(item.comment)+'</p></div></li>';
 				      
               		  
 				});
