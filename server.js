@@ -228,13 +228,20 @@ app.post('/regValidate',function(req,res){
     var password = req.body.user.password;
     
     // Validate the user
+
+    //Check whether the email already exists . 
     res.setHeader('Content-Type', 'application/json');
-    /*pool.query('INSERT INTO "user" (email,pwd,uname) values($1,$2,$3)',[email,password,name],function(err,result){
+    pool.query('SELECT uid FROM "user" WHERE email=$1',[email],function(err,result){
     	if(err) console.log(err);
+    	if(result.rowCount == 0){
+    		res.send(JSON.stringify({ status: 'OK'}));
+    	}
+    	else{
+    		res.send(JSON.stringify({ status: 'FAIL',msg: 'Email Already exists'}));
+    	}
     	
-    	
-    });*/
-    res.send(JSON.stringify({ status: 'OK'}));
+    });
+    
     
 });
 
@@ -290,6 +297,8 @@ app.post('/userLogin',function(req,res){
 							res.send(JSON.stringify({ status: 'OK',uid: item.uid}));
 						}
 					});
+				}else{
+					res.send(JSON.stringify({ status: 'FAIL'}));
 				}
 			}
 		});

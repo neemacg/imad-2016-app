@@ -501,3 +501,9 @@ a {
   background-color: #f5f5f5;
 }
 .bg-cover{background:url('/ui/images/cover.jpg');background-size: cover;}
+.has-error .form-control {
+    border-color: #d9534f !important;
+}
+.has-error .with-errors{color: #d9534f;}
+.msg-login-alert{font-size: 15px;}
+.container{padding-top: 3rem;}

@@ -53,22 +53,27 @@
         <div class="loginmodal-container">
           <h1>Login to Your Account</h1><br>
           <form id="loginForm" data-toggle="validator" role="form">
+          <div class="alert alert-danger msg-login-alert" style="display: none;">
+            <strong>oops!</strong> Please check email/password
+          </div>
           <div class="form-group">
             <div class="controls">
-              <input type="text" class="form-control" id="mod-uname" name="user[name]" placeholder="Email" required data-error="Please enter a valid email"/>
+              <input type="email" class="form-control" id="mod-uname" name="user[name]" placeholder="Email" required data-error="Please enter a valid email"/>
               <p class="help-block with-errors"></p>
             </div>
           </div>
-          <input type="password" name="user[pass]" placeholder="Password" required>
+          <div class="form-group">
+            <input type="password" name="user[pass]" placeholder="Password" required class="form-control" data-error="Please enter password">
+          </div>
           <input type="submit" name="login" id="loginSubmit" class="login loginmodal-submit" value="Login">
           </form>
           
           <div class="login-help">
-          <a href="/register">Register</a> - <a href="#">Forgot Password</a>
+          <a href="/register">Register</a> <!-- - <a href="#">Forgot Password</a> -->
           </div>
         </div>
       </div>
-</div>
+</div> 
 
 
 
@@ -195,6 +200,9 @@
                         uid = data.uid;
                         $("#commentBtn").prop("disabled",false);
                         $('input[name="uid"]').val(uid);
+                       }
+                       else{
+                          $('.msg-login-alert').show(500);
                        }
                      }
         });
