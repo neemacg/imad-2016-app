@@ -507,3 +507,4 @@ a {
 .has-error .with-errors{color: #d9534f;}
 .msg-login-alert{font-size: 15px;}
 .container{padding-top: 3rem;}
+.bg-inverse{background-color: #c9302c !important;}
